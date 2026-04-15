@@ -45,7 +45,14 @@ npm run test:e2e      # integration tests (Supertest against real NestJS app)
 **Frontend** (from `frontend/`):
 ```bash
 npm run test          # component tests (Vitest + React Testing Library)
+npm run test:e2e      # Playwright E2E tests (starts both servers automatically)
 ```
+
+**E2E test coverage:**
+- Auth flows — register, login, duplicate email, token persistence, redirect guards
+- Profile flows — inline name edit, export download, delete account (modal + confirm)
+- Landing — CTA navigation, features section, mobile hamburger menu
+- Accessibility audit — axe-core on all 5 pages (zero violations)
 
 ---
 
