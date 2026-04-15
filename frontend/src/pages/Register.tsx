@@ -58,7 +58,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -70,7 +70,7 @@ export default function Register() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Create your account</CardTitle>
+            <h1 className="text-xl font-medium leading-snug">Create your account</h1>
             <CardDescription>Join the waitlist and get early access.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -118,13 +118,13 @@ export default function Register() {
 
             <p className="text-center text-sm text-gray-500 mt-4">
               Already have an account?{' '}
-              <Link to="/login" className="text-primary-brand hover:underline">
+              <Link to="/login" className="text-primary-brand underline underline-offset-2">
                 Sign in
               </Link>
             </p>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </main>
   );
 }

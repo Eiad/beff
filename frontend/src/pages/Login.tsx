@@ -49,7 +49,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -61,7 +61,7 @@ export default function Login() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-xl">Welcome back</CardTitle>
+            <h1 className="text-xl font-medium leading-snug">Welcome back</h1>
             <CardDescription>Sign in to your B-eff account.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -95,13 +95,13 @@ export default function Login() {
 
             <p className="text-center text-sm text-gray-500 mt-4">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary-brand hover:underline">
+              <Link to="/register" className="text-primary-brand underline underline-offset-2">
                 Join Early Access
               </Link>
             </p>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </main>
   );
 }

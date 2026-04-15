@@ -10,13 +10,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// On 401 → clear token + force redirect to login
+// On 401 → clear token + redirect to login — but NOT for auth endpoints
+// (login/register failures should be handled by the component, not redirected)
 api.interceptors.response.use(
   (res) => res,
   (error: unknown) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
-      localStorage.removeItem(BEFF_AUTH_TOKEN);
-      window.location.href = '/login';
+      const requestUrl = error.config?.url ?? '';
+      const isAuthEndpoint = requestUrl.includes('/auth/');
+      if (!isAuthEndpoint) {
+        localStorage.removeItem(BEFF_AUTH_TOKEN);
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   },

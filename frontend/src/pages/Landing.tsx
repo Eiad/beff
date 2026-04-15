@@ -37,6 +37,7 @@ export default function Landing() {
       <GeometricGrid />
       <Navbar />
 
+      <main>
       {/* Hero */}
       <section className="min-h-screen flex flex-col items-center justify-center px-4 text-center pt-14">
         <motion.div
@@ -176,6 +177,7 @@ export default function Landing() {
         </motion.div>
       </section>
 
+      </main>
       {/* Footer */}
       <footer className="border-t border-gray-100 py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">

@@ -156,5 +156,6 @@ export default function GeometricGrid() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-10" style={{ background: '#ffffff' }} />;
+  // aria-hidden: purely decorative — screen readers should ignore the canvas animation
+  return <canvas ref={canvasRef} className="fixed inset-0 -z-10" style={{ background: '#ffffff' }} aria-hidden="true" />;
 }
