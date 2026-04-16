@@ -1,7 +1,7 @@
 import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
 import { UsersService, SafeUser } from '../users/users.service';
 import { createHash, randomBytes, timingSafeEqual } from 'crypto';
+import { signJwt } from '../common/jwt-utils';
 
 // Pure Node.js crypto password hashing — no native dependencies, works on all serverless runtimes
 function hashPassword(password: string): string {
@@ -51,10 +51,9 @@ export class AuthService {
   }
 
   private signToken(user: SafeUser): string {
-    return jwt.sign(
+    return signJwt(
       { sub: user.id, email: user.email, name: user.name },
       process.env.JWT_SECRET!,
-      { expiresIn: '7d' },
     );
   }
 }

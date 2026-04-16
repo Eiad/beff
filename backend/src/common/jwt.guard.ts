@@ -4,16 +4,10 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as jwt from 'jsonwebtoken';
 import { UsersService } from '../users/users.service';
+import { verifyJwt, type JwtPayload } from './jwt-utils';
 
-export interface JwtPayload {
-  sub: string;
-  email: string;
-  name: string;
-  iat: number;
-  exp: number;
-}
+export type { JwtPayload };
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -33,7 +27,7 @@ export class JwtGuard implements CanActivate {
     // Verify JWT signature and expiry
     let payload: JwtPayload;
     try {
-      payload = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+      payload = verifyJwt(token, process.env.JWT_SECRET!);
     } catch {
       throw new UnauthorizedException('Invalid or expired token');
     }
