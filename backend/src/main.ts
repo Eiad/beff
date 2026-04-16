@@ -5,8 +5,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // CORS — must be called before app.listen()
+  // In production on Vercel (same-origin via experimentalServices), allow the deployment URL.
+  // In dev, allow localhost:5173.
+  const allowedOrigin = process.env.ALLOWED_ORIGIN
+    ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173');
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGIN ?? 'http://localhost:5173',
+    origin: process.env.NODE_ENV === 'production' ? true : allowedOrigin,
     credentials: true,
   });
 
