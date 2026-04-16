@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { TrendingUp, TrendingDown, Leaf, Users, ShieldCheck, FileText, Plus, Download } from 'lucide-react';
+import { TrendingUp, TrendingDown, Leaf, Users, ShieldCheck, FileText, Plus, Download, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
 import PageTransition from '../components/PageTransition';
 import { SkeletonCard, SkeletonActivity } from '../components/Skeleton';
 import { useAuth } from '../contexts/AuthContext';
 import type { StatCard, ActivityItem } from '../types';
 
 const STATS: StatCard[] = [
-  { label: 'Fleet CO₂ Reduced', value: '142', unit: 'tonnes', trend: '+12%', trendUp: true, icon: 'leaf' },
+  { label: 'Fleet CO\u2082 Reduced', value: '142', unit: 'tonnes', trend: '+12%', trendUp: true, icon: 'leaf' },
   { label: 'Teams Enrolled', value: '8', unit: 'teams', trend: '+2', trendUp: true, icon: 'users' },
   { label: 'Compliance Score', value: '94', unit: '%', trend: '+3%', trendUp: true, icon: 'shield' },
   { label: 'Reports Generated', value: '31', unit: 'reports', trend: '-1', trendUp: false, icon: 'file' },
@@ -19,17 +18,17 @@ const STATS: StatCard[] = [
 const ACTIVITIES: ActivityItem[] = [
   { id: '1', description: 'Fleet report Q1 2025 generated', timestamp: '2 hours ago' },
   { id: '2', description: 'Engineering team enrolled in green goals programme', timestamp: '5 hours ago' },
-  { id: '3', description: 'CO₂ reduction milestone hit: 100 tonnes saved', timestamp: 'Yesterday' },
-  { id: '4', description: 'Compliance audit completed — score: 94%', timestamp: '3 days ago' },
+  { id: '3', description: 'CO\u2082 reduction milestone hit: 100 tonnes saved', timestamp: 'Yesterday' },
+  { id: '4', description: 'Compliance audit completed \u2014 score: 94%', timestamp: '3 days ago' },
   { id: '5', description: 'New ESG regulation added to monitoring scope', timestamp: '1 week ago' },
 ];
 
 const ICON_MAP = { leaf: Leaf, users: Users, shield: ShieldCheck, file: FileText };
 const ACCENT_MAP = {
-  leaf: { bg: 'bg-emerald-50', text: 'text-emerald-600' },
-  users: { bg: 'bg-blue-50', text: 'text-blue-600' },
-  shield: { bg: 'bg-amber-50', text: 'text-amber-600' },
-  file: { bg: 'bg-purple-50', text: 'text-purple-600' },
+  leaf: { gradient: 'from-emerald-500 to-teal-600', bg: 'bg-emerald-50', text: 'text-emerald-600', light: 'text-emerald-500' },
+  users: { gradient: 'from-blue-500 to-indigo-600', bg: 'bg-blue-50', text: 'text-blue-600', light: 'text-blue-500' },
+  shield: { gradient: 'from-amber-500 to-orange-600', bg: 'bg-amber-50', text: 'text-amber-600', light: 'text-amber-500' },
+  file: { gradient: 'from-purple-500 to-violet-600', bg: 'bg-purple-50', text: 'text-purple-600', light: 'text-purple-500' },
 };
 
 export default function Dashboard() {
@@ -37,7 +36,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = 'Dashboard — B-eff';
+    document.title = 'Dashboard \u2014 B-eff';
     const timer = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);
@@ -50,15 +49,27 @@ export default function Dashboard() {
   });
 
   return (
-    <PageTransition className="px-4 sm:px-6 lg:px-10 pt-16 lg:pt-8 pb-12">
-      <div className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900">
-          Welcome back, {user?.name ?? 'there'}
-        </h1>
-        <p className="text-gray-500 text-sm mt-1">{today}</p>
-      </div>
+    <PageTransition className="px-4 sm:px-6 lg:px-10 pt-16 lg:pt-8 pb-12 max-w-6xl">
+      {/* Welcome banner */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700 px-6 py-6 sm:px-8 sm:py-8 mb-6"
+      >
+        <div className="absolute inset-0 noise-overlay rounded-2xl" />
+        <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
+        <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/5 rounded-full" />
+        <div className="relative">
+          <h1 className="text-xl sm:text-2xl font-semibold text-white">
+            Welcome back, {user?.name ?? 'there'}
+          </h1>
+          <p className="text-emerald-100/70 text-sm mt-1">{today}</p>
+        </div>
+      </motion.div>
 
-      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-5 mb-8">
+      {/* Stat cards */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 mb-6">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
           : STATS.map((stat, i) => {
@@ -70,27 +81,25 @@ export default function Dashboard() {
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: i * 0.05 }}
+                  className="group"
                 >
-                  <Card className="border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
-                    <CardContent className="p-4 sm:p-6">
-                      <div className="flex items-start justify-between mb-3 sm:mb-4">
-                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl ${accent.bg} flex items-center justify-center`}>
-                          <Icon size={18} className={accent.text} />
+                  <Card className="border-gray-100 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden relative">
+                    {/* Top accent bar */}
+                    <div className={`h-1 bg-gradient-to-r ${accent.gradient}`} />
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${accent.gradient} flex items-center justify-center shadow-sm`}>
+                          <Icon size={15} className="text-white" />
                         </div>
-                        <Badge
-                          variant="outline"
-                          className={`text-xs font-medium ${
-                            stat.trendUp
-                              ? 'text-emerald-600 border-emerald-200 bg-emerald-50'
-                              : 'text-red-500 border-red-200 bg-red-50'
-                          }`}
-                        >
-                          {stat.trendUp ? <TrendingUp size={12} className="mr-1" /> : <TrendingDown size={12} className="mr-1" />}
+                        <span className={`inline-flex items-center gap-0.5 text-xs font-semibold ${
+                          stat.trendUp ? 'text-emerald-600' : 'text-red-500'
+                        }`}>
+                          {stat.trendUp ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
                           {stat.trend}
-                        </Badge>
+                        </span>
                       </div>
-                      <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stat.value}</p>
-                      <p className="text-xs sm:text-sm text-gray-500 mt-1">{stat.label}</p>
+                      <p className="text-2xl font-bold text-gray-900 leading-none">{stat.value}</p>
+                      <p className="text-xs text-gray-500 mt-1.5">{stat.label}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -98,12 +107,16 @@ export default function Dashboard() {
             })}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-4 sm:gap-5">
+        {/* Recent Activity */}
         <Card className="lg:col-span-2 border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
+          <CardHeader className="pb-2 px-5">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-sm font-semibold text-gray-900">Recent Activity</CardTitle>
+              <span className="text-xs text-emerald-600 font-medium cursor-pointer hover:text-emerald-700">View all</span>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-5 pb-5">
             {loading ? (
               <div className="space-y-1">
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -112,7 +125,7 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className="relative">
-                <div className="absolute left-[5px] top-3 bottom-3 w-px bg-gray-100" />
+                <div className="absolute left-[5px] top-2 bottom-2 w-px bg-gradient-to-b from-emerald-200 via-emerald-100 to-transparent" />
                 <ul className="space-y-0">
                   {ACTIVITIES.map((item, i) => (
                     <motion.li
@@ -120,12 +133,12 @@ export default function Dashboard() {
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="flex items-start gap-4 py-3 px-2 rounded-lg hover:bg-gray-50/50 transition-colors relative"
+                      className="flex items-start gap-3 py-2.5 px-1 rounded-lg hover:bg-gray-50/80 transition-colors relative"
                     >
-                      <div className="w-[11px] h-[11px] rounded-full bg-emerald-500 border-2 border-white mt-1.5 shrink-0 relative z-10" />
-                      <div className="flex-1 flex items-start justify-between gap-2">
-                        <p className="text-sm text-gray-700">{item.description}</p>
-                        <span className="text-xs text-gray-400 whitespace-nowrap">{item.timestamp}</span>
+                      <div className="w-[11px] h-[11px] rounded-full bg-emerald-500 border-2 border-white mt-1.5 shrink-0 relative z-10 shadow-sm" />
+                      <div className="flex-1 flex items-start justify-between gap-2 min-w-0">
+                        <p className="text-sm text-gray-700 leading-snug">{item.description}</p>
+                        <span className="text-[11px] text-gray-400 whitespace-nowrap mt-0.5">{item.timestamp}</span>
                       </div>
                     </motion.li>
                   ))}
@@ -135,24 +148,30 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
+        {/* Quick Actions */}
         <Card className="border-gray-100 shadow-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-semibold">Quick Actions</CardTitle>
+          <CardHeader className="pb-2 px-5">
+            <CardTitle className="text-sm font-semibold text-gray-900">Quick Actions</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2">
+          <CardContent className="flex flex-col gap-2 px-5 pb-5">
             {[
-              { icon: Plus, label: 'Add Team' },
-              { icon: FileText, label: 'Generate Report' },
-              { icon: Download, label: 'Export Data' },
+              { icon: Plus, label: 'Add Team', desc: 'Create a new team', color: 'from-emerald-500 to-teal-600' },
+              { icon: FileText, label: 'Generate Report', desc: 'Create ESG report', color: 'from-blue-500 to-indigo-600' },
+              { icon: Download, label: 'Export Data', desc: 'Download as CSV', color: 'from-purple-500 to-violet-600' },
             ].map((action) => (
-              <Button
+              <button
                 key={action.label}
-                variant="outline"
-                className="w-full justify-start gap-3 text-sm h-11 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all duration-200"
+                className="flex items-center gap-3 w-full p-3 rounded-xl border border-gray-100 hover:border-emerald-200 hover:bg-emerald-50/30 transition-all duration-200 text-left group"
               >
-                <action.icon size={16} className="text-gray-500" />
-                {action.label}
-              </Button>
+                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${action.color} flex items-center justify-center shadow-sm shrink-0`}>
+                  <action.icon size={14} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900">{action.label}</p>
+                  <p className="text-[11px] text-gray-400">{action.desc}</p>
+                </div>
+                <ArrowRight size={14} className="text-gray-300 group-hover:text-emerald-500 transition-colors shrink-0" />
+              </button>
             ))}
           </CardContent>
         </Card>
