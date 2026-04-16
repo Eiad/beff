@@ -1,17 +1,37 @@
 import { useEffect, useState } from 'react';
-import { Pencil, Download, Trash2, Check, X } from 'lucide-react';
+import { motion } from 'motion/react';
+import {
+  Pencil, Download, Trash2, Check, X, Calendar, Shield, Bell,
+  Smartphone, Lock, Loader2, LogIn, FileText, UserCog,
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import Navbar from '../components/Navbar';
+import PageTransition from '../components/PageTransition';
 import ConfirmModal from '../components/ConfirmModal';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../components/Toast';
 import api from '../api/axios';
 import axios from 'axios';
 
+const NOTIFICATION_PREFS = [
+  { id: 'email-reports', label: 'Email reports', description: 'Receive weekly sustainability reports via email' },
+  { id: 'compliance-alerts', label: 'Compliance alerts', description: 'Get notified about regulatory changes' },
+  { id: 'team-updates', label: 'Team updates', description: 'Notifications when teams hit milestones' },
+];
+
+const ACTIVITY_LOG = [
+  { action: 'Logged in', icon: LogIn, timestamp: 'Today at 2:34 PM' },
+  { action: 'Exported account data', icon: Download, timestamp: 'Yesterday at 11:20 AM' },
+  { action: 'Updated display name', icon: UserCog, timestamp: '3 days ago' },
+  { action: 'Generated Q1 report', icon: FileText, timestamp: '1 week ago' },
+  { action: 'Logged in', icon: LogIn, timestamp: '1 week ago' },
+];
+
 export default function Profile() {
   const { user, updateUser, logout } = useAuth();
+  const { toast } = useToast();
   const [editing, setEditing] = useState(false);
   const [nameInput, setNameInput] = useState(user?.name ?? '');
   const [savingName, setSavingName] = useState(false);
@@ -19,12 +39,16 @@ export default function Profile() {
   const [exportLoading, setExportLoading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState<Record<string, boolean>>({
+    'email-reports': true,
+    'compliance-alerts': true,
+    'team-updates': false,
+  });
 
   useEffect(() => {
-    document.title = 'Profile — B-eff';
+    document.title = 'Profile \u2014 B-eff';
   }, []);
 
-  // Cancel on Escape key
   useEffect(() => {
     if (!editing) return;
     const handleKey = (e: KeyboardEvent) => {
@@ -56,6 +80,7 @@ export default function Profile() {
       const res = await api.patch<{ name: string }>('/users/me', { name: nameInput.trim() });
       updateUser({ name: res.data.name });
       setEditing(false);
+      toast('Name updated successfully');
     } catch {
       setNameError('Failed to save. Please try again.');
     } finally {
@@ -76,8 +101,9 @@ export default function Profile() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      toast('Data export started');
     } catch {
-      // fail silently — user can retry
+      toast('Export failed. Please try again.', 'error');
     } finally {
       setExportLoading(false);
     }
@@ -97,25 +123,29 @@ export default function Profile() {
     }
   };
 
+  const toggleNotif = (id: string) => {
+    setNotifPrefs((prev) => ({ ...prev, [id]: !prev[id] }));
+    toast('Preference updated');
+  };
+
   const memberSince = user?.createdAt
     ? new Date(user.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
-    : '—';
+    : '\u2014';
+
+  const sectionDelay = (i: number) => ({ duration: 0.3, delay: i * 0.08 });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="max-w-2xl mx-auto px-4 pt-20 pb-12">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-6">Profile</h1>
+    <PageTransition className="px-6 lg:px-10 pt-8 pb-12 max-w-3xl">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-8">Profile</h1>
 
-        {/* User info */}
-        <Card className="mb-6">
-          <CardHeader className="pb-2">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(0)}>
+        <Card className="mb-6 border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold">Account</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Avatar */}
+          <CardContent className="space-y-5">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-primary-brand flex items-center justify-center text-white text-xl font-semibold shrink-0">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-xl font-semibold shrink-0 shadow-sm">
                 {user?.name?.charAt(0).toUpperCase() ?? '?'}
               </div>
               <div>
@@ -126,20 +156,24 @@ export default function Profile() {
                         id="name-edit"
                         value={nameInput}
                         onChange={(e) => setNameInput(e.target.value)}
-                        className="h-8 text-sm w-48"
+                        className="h-9 text-sm w-48"
                         autoFocus
                       />
                       <button
                         onClick={saveName}
                         disabled={savingName}
-                        className="p-1 rounded hover:bg-gray-100"
+                        className="p-1.5 rounded-lg hover:bg-emerald-50 transition-colors"
                         aria-label="Save name"
                       >
-                        <Check size={16} className="text-primary-brand" />
+                        {savingName ? (
+                          <Loader2 size={16} className="animate-spin text-emerald-600" />
+                        ) : (
+                          <Check size={16} className="text-emerald-600" />
+                        )}
                       </button>
                       <button
                         onClick={cancelEdit}
-                        className="p-1 rounded hover:bg-gray-100"
+                        className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
                         aria-label="Cancel edit"
                       >
                         <X size={16} className="text-gray-400" />
@@ -149,10 +183,10 @@ export default function Profile() {
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-900">{user?.name}</span>
+                    <span className="font-medium text-gray-900 text-lg">{user?.name}</span>
                     <button
                       onClick={startEdit}
-                      className="p-1 rounded hover:bg-gray-100"
+                      className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
                       aria-label="Edit name"
                     >
                       <Pencil size={14} className="text-gray-400" />
@@ -163,22 +197,99 @@ export default function Profile() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 pt-2 border-t border-gray-100">
-              <div>
-                <Label className="text-xs text-gray-400">Member since</Label>
-                <p className="text-sm text-gray-700 mt-0.5">{memberSince}</p>
-              </div>
+            <div className="flex items-center gap-2 pt-3 border-t border-gray-100 text-sm text-gray-500">
+              <Calendar size={14} className="text-gray-400" />
+              Member since {memberSince}
             </div>
           </CardContent>
         </Card>
+      </motion.div>
 
-        {/* Data & Privacy — GDPR */}
-        <Card>
-          <CardHeader className="pb-2">
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(1)}>
+        <Card className="mb-6 border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <Shield size={16} className="text-gray-400" />
+              Security
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-800">Change password</p>
+                <p className="text-xs text-gray-500 mt-0.5">Update your account password</p>
+              </div>
+              <Button variant="outline" size="sm" disabled className="text-gray-400">
+                <Lock size={14} className="mr-1.5" />
+                Update
+              </Button>
+            </div>
+            <div className="border-t border-gray-100" />
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-800">Two-factor authentication</p>
+                <p className="text-xs text-gray-500 mt-0.5">Add an extra layer of security</p>
+              </div>
+              <button
+                className="relative w-10 h-6 rounded-full bg-gray-200 transition-colors cursor-not-allowed"
+                disabled
+                aria-label="Two-factor authentication toggle (coming soon)"
+              >
+                <div className="absolute left-1 top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform" />
+              </button>
+            </div>
+            <div className="border-t border-gray-100" />
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Smartphone size={14} className="text-gray-400" />
+              Last login: Today at 2:34 PM
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(2)}>
+        <Card className="mb-6 border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <Bell size={16} className="text-gray-400" />
+              Notification Preferences
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {NOTIFICATION_PREFS.map((pref, i) => (
+              <div key={pref.id}>
+                {i > 0 && <div className="border-t border-gray-100 mb-4" />}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">{pref.label}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{pref.description}</p>
+                  </div>
+                  <button
+                    onClick={() => toggleNotif(pref.id)}
+                    className={`relative w-10 h-6 rounded-full transition-colors ${
+                      notifPrefs[pref.id] ? 'bg-emerald-500' : 'bg-gray-200'
+                    }`}
+                    aria-label={`Toggle ${pref.label}`}
+                  >
+                    <div
+                      className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                        notifPrefs[pref.id] ? 'translate-x-5' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(3)}>
+        <Card className="mb-6 border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
             <CardTitle className="text-base font-semibold">Data & Privacy</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* GDPR 1: Data portability */}
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-sm font-medium text-gray-800">Export your data</p>
@@ -193,15 +304,18 @@ export default function Profile() {
                 disabled={exportLoading}
                 className="shrink-0 gap-1.5"
               >
-                <Download size={14} />
-                {exportLoading ? 'Exporting…' : 'Export'}
+                {exportLoading ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <Download size={14} />
+                )}
+                {exportLoading ? 'Exporting...' : 'Export'}
               </Button>
             </div>
 
             <div className="border-t border-gray-100" />
 
-            {/* GDPR 2: Right to erasure */}
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-4 bg-red-50/50 -mx-6 px-6 py-4 rounded-lg">
               <div>
                 <p className="text-sm font-medium text-red-600">Delete account</p>
                 <p className="text-xs text-gray-500 mt-0.5">
@@ -220,7 +334,29 @@ export default function Profile() {
             </div>
           </CardContent>
         </Card>
-      </main>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(4)}>
+        <Card className="border-gray-100 shadow-sm">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-0">
+              {ACTIVITY_LOG.map((entry, i) => (
+                <li
+                  key={i}
+                  className="flex items-center gap-3 py-2.5 text-sm border-b border-gray-50 last:border-0"
+                >
+                  <entry.icon size={15} className="text-gray-400 shrink-0" />
+                  <span className="text-gray-700 flex-1">{entry.action}</span>
+                  <span className="text-xs text-gray-400">{entry.timestamp}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       <ConfirmModal
         open={deleteOpen}
@@ -229,8 +365,9 @@ export default function Profile() {
         title="Delete your account?"
         description="This will permanently delete your B-eff account and all your data. This action cannot be undone."
         confirmLabel="Delete Account"
+        confirmText="delete my account"
         loading={deleteLoading}
       />
-    </div>
+    </PageTransition>
   );
 }

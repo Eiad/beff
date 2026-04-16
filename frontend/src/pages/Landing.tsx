@@ -47,7 +47,7 @@ export default function Landing() {
           className="mb-6"
         >
           <Badge variant="outline" className="text-xs font-medium px-3 py-1 border-gray-300">
-            <Leaf size={12} className="mr-1 text-primary-brand" />
+            <Leaf size={12} className="mr-1 text-emerald-600" />
             500+ companies already on the waitlist
           </Badge>
         </motion.div>
@@ -73,7 +73,7 @@ export default function Landing() {
           <Link to="/register">
             <Button
               size="lg"
-              className="bg-primary-brand hover:bg-primary-brand-dark text-white gap-2"
+              className="bg-emerald-600 hover:bg-emerald-600-dark text-white gap-2"
             >
               Join the Waitlist <ArrowRight size={16} />
             </Button>
@@ -120,8 +120,8 @@ export default function Landing() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-100 p-6"
             >
-              <div className="w-10 h-10 rounded-xl bg-primary-brand-light flex items-center justify-center mb-4">
-                <f.icon size={20} className="text-primary-brand" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-600-light flex items-center justify-center mb-4">
+                <f.icon size={20} className="text-emerald-600" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
               <p className="text-gray-500 text-sm leading-relaxed">{f.description}</p>
@@ -139,7 +139,7 @@ export default function Landing() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Leaf size={36} className="mx-auto text-primary-brand mb-6" />
+            <Leaf size={36} className="mx-auto text-emerald-600 mb-6" />
             <h2 className="text-3xl font-serif font-normal text-gray-900 mb-4">
               Why B-eff?
             </h2>
@@ -170,7 +170,7 @@ export default function Landing() {
             Early access partners get priority onboarding, direct input on the roadmap, and founding member pricing.
           </p>
           <Link to="/register">
-            <Button size="lg" className="bg-primary-brand hover:bg-primary-brand-dark text-white gap-2">
+            <Button size="lg" className="bg-emerald-600 hover:bg-emerald-600-dark text-white gap-2">
               Request Early Access <ArrowRight size={16} />
             </Button>
           </Link>
@@ -182,7 +182,7 @@ export default function Landing() {
       <footer className="border-t border-gray-100 py-8">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
-            <Leaf size={14} className="text-primary-brand" />
+            <Leaf size={14} className="text-emerald-600" />
             <span className="font-serif">B-eff</span>
           </div>
           <div className="flex items-center gap-4">
