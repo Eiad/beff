@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Leaf, BarChart2, Shield, Zap, ArrowRight } from 'lucide-react';
@@ -8,26 +8,38 @@ import GeometricGrid from '../components/GeometricGrid';
 import AnimatedLogo from '../components/AnimatedLogo';
 import ScrollIndicator from '../components/ScrollIndicator';
 import Navbar from '../components/Navbar';
+import FeatureDetailsModal, { type FeatureKey } from '../components/FeatureDetailsModal';
 
-const FEATURES = [
+const FEATURES: { icon: typeof BarChart2; title: string; description: string; key: FeatureKey }[] = [
   {
     icon: BarChart2,
+    key: 'carbon',
     title: 'Carbon Intelligence',
     description: 'Real-time CO₂ tracking across your fleet and operations. Understand your footprint with actionable insights, not just raw data.',
   },
   {
     icon: Shield,
+    key: 'compliance',
     title: 'Compliance Automation',
     description: 'Stay ahead of ESG regulations automatically. B-eff monitors regulatory changes and keeps your reports audit-ready.',
   },
   {
     icon: Zap,
+    key: 'engagement',
     title: 'Team Engagement',
     description: 'Enroll teams, set sustainability goals, and celebrate milestones. Green culture starts with visibility and recognition.',
   },
 ];
 
 export default function Landing() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFeature, setSelectedFeature] = useState<FeatureKey>('carbon');
+
+  const handleFeatureClick = (key: FeatureKey) => {
+    setSelectedFeature(key);
+    setModalOpen(true);
+  };
+
   useEffect(() => {
     document.title = 'B-eff | Greener Business, Together';
   }, []);
@@ -36,6 +48,11 @@ export default function Landing() {
     <div className="relative">
       <GeometricGrid />
       <Navbar />
+      <FeatureDetailsModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        featureKey={selectedFeature}
+      />
 
       <main>
       {/* Hero */}
@@ -118,13 +135,16 @@ export default function Landing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-100 p-6"
+              whileHover={{ y: -4 }}
+              onClick={() => handleFeatureClick(f.key)}
+              className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-100 p-6 cursor-pointer hover:shadow-lg hover:border-emerald-200 transition-all duration-200"
             >
-              <div className="w-10 h-10 rounded-xl bg-emerald-600-light flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
                 <f.icon size={20} className="text-emerald-600" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
               <p className="text-gray-500 text-sm leading-relaxed">{f.description}</p>
+              <span className="inline-block mt-3 text-xs text-emerald-600 font-medium">Learn more &rarr;</span>
             </motion.div>
           ))}
         </div>
