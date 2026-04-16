@@ -47,8 +47,8 @@ describe('Login page', () => {
     mockPost.mockRejectedValueOnce(err);
 
     renderLogin();
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'user@test.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'wrongpass' } });
+    fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'user@test.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'wrongpass' } });
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
     });
@@ -63,8 +63,8 @@ describe('Login page', () => {
     });
 
     renderLogin();
-    fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'bob@test.com' } });
-    fireEvent.change(screen.getByLabelText(/password/i), { target: { value: 'password123' } });
+    fireEvent.change(screen.getByLabelText('Email address'), { target: { value: 'bob@test.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'password123' } });
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
     });

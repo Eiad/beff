@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Profile from './Profile';
 import { AuthProvider } from '../contexts/AuthContext';
+import { ToastProvider } from '../components/Toast';
 import { BEFF_AUTH_TOKEN } from '../constants';
 
 vi.mock('../api/axios', () => ({
@@ -30,7 +31,9 @@ function renderProfile() {
   return render(
     <MemoryRouter>
       <AuthProvider>
-        <Profile />
+        <ToastProvider>
+          <Profile />
+        </ToastProvider>
       </AuthProvider>
     </MemoryRouter>,
   );
@@ -115,6 +118,9 @@ describe('Profile page', () => {
     await act(async () => { renderProfile(); });
     fireEvent.click(screen.getByRole('button', { name: /delete/i }));
     await waitFor(() => { screen.getByText(/delete your account\?/i); });
+    // Type confirmation text (type-to-confirm modal)
+    const confirmInput = screen.getByPlaceholderText('delete my account');
+    fireEvent.change(confirmInput, { target: { value: 'delete my account' } });
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /delete account/i }));
     });
