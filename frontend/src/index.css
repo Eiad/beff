@@ -8,6 +8,11 @@
   --color-primary-brand: #16a34a;
   --color-primary-brand-dark: #15803d;
   --color-primary-brand-light: #dcfce7;
+  --color-warm-bg: #FAFAF8;
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
 }
@@ -78,7 +83,7 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
+  --background: oklch(0.987 0.002 90);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -144,4 +149,9 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -15px); }
 }
