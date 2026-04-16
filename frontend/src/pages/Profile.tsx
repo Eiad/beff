@@ -135,8 +135,8 @@ export default function Profile() {
   const sectionDelay = (i: number) => ({ duration: 0.3, delay: i * 0.08 });
 
   return (
-    <PageTransition className="px-6 lg:px-10 pt-8 pb-12 max-w-3xl">
-      <h1 className="text-2xl font-semibold text-gray-900 mb-8">Profile</h1>
+    <PageTransition className="px-4 sm:px-6 lg:px-10 pt-16 lg:pt-8 pb-12 max-w-3xl">
+      <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6 sm:mb-8">Profile</h1>
 
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={sectionDelay(0)}>
         <Card className="mb-6 border-gray-100 shadow-sm">

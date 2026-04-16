@@ -50,7 +50,7 @@ export default function Dashboard() {
   });
 
   return (
-    <PageTransition className="px-6 lg:px-10 pt-8 pb-12">
+    <PageTransition className="px-4 sm:px-6 lg:px-10 pt-16 lg:pt-8 pb-12">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900">
           Welcome back, {user?.name ?? 'there'}
@@ -58,7 +58,7 @@ export default function Dashboard() {
         <p className="text-gray-500 text-sm mt-1">{today}</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-5 mb-8">
         {loading
           ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
           : STATS.map((stat, i) => {
@@ -72,10 +72,10 @@ export default function Dashboard() {
                   transition={{ duration: 0.3, delay: i * 0.05 }}
                 >
                   <Card className="border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
-                    <CardContent className="p-6">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className={`w-10 h-10 rounded-xl ${accent.bg} flex items-center justify-center`}>
-                          <Icon size={20} className={accent.text} />
+                    <CardContent className="p-4 sm:p-6">
+                      <div className="flex items-start justify-between mb-3 sm:mb-4">
+                        <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl ${accent.bg} flex items-center justify-center`}>
+                          <Icon size={18} className={accent.text} />
                         </div>
                         <Badge
                           variant="outline"
@@ -89,8 +89,8 @@ export default function Dashboard() {
                           {stat.trend}
                         </Badge>
                       </div>
-                      <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
-                      <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
+                      <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stat.value}</p>
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1">{stat.label}</p>
                     </CardContent>
                   </Card>
                 </motion.div>

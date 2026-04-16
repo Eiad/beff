@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left: form */}
-      <div className="flex items-center justify-center px-6 py-12">
+      <div className="flex items-center justify-center px-5 py-8 sm:px-6 sm:py-12">
         <div className="w-full max-w-[400px]">{children}</div>
       </div>
       {/* Right: branded visual */}
