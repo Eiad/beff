@@ -69,15 +69,14 @@ export default function Profile() {
 
       {/* Profile header card with gradient banner */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
-        <Card className="border-gray-100 shadow-sm overflow-hidden mb-5">
+        <div className="rounded-xl border border-gray-100 shadow-sm overflow-hidden mb-5 bg-white">
           {/* Banner */}
           <div className="h-28 bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 relative">
-            <div className="absolute inset-0 noise-overlay" />
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/5 rounded-full" />
             <div className="absolute -top-6 -left-6 w-24 h-24 bg-white/5 rounded-full" />
           </div>
 
-          <CardContent className="pt-0 pb-6 px-6">
+          <div className="pt-0 pb-6 px-6">
             {/* Avatar overlapping the banner */}
             <div className="flex items-end gap-4 -mt-10 mb-5">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold shrink-0 shadow-lg border-4 border-white">
@@ -174,8 +173,8 @@ export default function Profile() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
 
       {/* Plan/Subscription card */}
@@ -192,7 +191,7 @@ export default function Profile() {
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">Early Access</p>
-                  <p className="text-xs text-gray-500">Founding member \u2014 priority onboarding</p>
+                  <p className="text-xs text-gray-500">Founding member — priority onboarding</p>
                 </div>
               </div>
               <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
