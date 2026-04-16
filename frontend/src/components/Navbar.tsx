@@ -28,7 +28,7 @@ export default function Navbar() {
             <Button variant="ghost" size="sm">Login</Button>
           </Link>
           <Link to="/register">
-            <Button size="sm" className="bg-emerald-600 hover:bg-emerald-500 text-white">
+            <Button size="sm" className="btn-primary">
               Join Early Access
             </Button>
           </Link>
@@ -51,7 +51,7 @@ export default function Navbar() {
             <Button variant="ghost" className="w-full justify-start">Login</Button>
           </Link>
           <Link to="/register" onClick={() => setMenuOpen(false)}>
-            <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white">
+            <Button className="w-full btn-primary">
               Join Early Access
             </Button>
           </Link>

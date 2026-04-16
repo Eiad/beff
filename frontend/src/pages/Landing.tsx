@@ -99,7 +99,7 @@ export default function Landing() {
           <Link to="/register">
             <Button
               size="lg"
-              className="bg-emerald-600 hover:bg-emerald-500 text-white gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-200"
+              className="btn-primary gap-2"
             >
               Join the Waitlist <ArrowRight size={16} />
             </Button>

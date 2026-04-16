@@ -146,7 +146,7 @@ export default function Login() {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow-sm hover:shadow-md transition-all duration-200 mt-2"
+              className="w-full h-12 rounded-lg btn-primary mt-2"
             >
               {isSubmitting ? (
                 <>

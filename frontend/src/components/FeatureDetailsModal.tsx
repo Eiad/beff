@@ -217,7 +217,7 @@ export default function FeatureDetailsModal({ isOpen, onClose, featureKey }: Fea
 
               {/* CTA */}
               <Link to="/register" onClick={onClose}>
-                <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-500 text-white gap-2">
+                <Button className="w-full h-11 btn-primary gap-2">
                   Join the Waitlist <ArrowRight size={16} />
                 </Button>
               </Link>
