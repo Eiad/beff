@@ -9,6 +9,7 @@ export default function AnimatedLogo() {
 
   const text = 'B-eff';
   const letters = text.split('');
+  const letterColors = ['#047857', '#059669', '#0d9488', '#0f766e', '#10b981'];
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     if (!containerRef.current) return;
@@ -39,7 +40,10 @@ export default function AnimatedLogo() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
+      {/* Glow behind logo */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-40 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
+
       <motion.h1
         ref={containerRef as React.RefObject<HTMLHeadingElement>}
         initial={{ opacity: 0, y: 20 }}
@@ -48,7 +52,7 @@ export default function AnimatedLogo() {
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
-        className="text-5xl sm:text-7xl md:text-9xl font-normal text-black tracking-tight"
+        className="text-5xl sm:text-7xl md:text-9xl font-normal tracking-tight relative text-emerald-700"
         style={{ perspective: '1000px', fontFamily: 'var(--font-serif)' }}
       >
         {letters.map((letter, index) => (
@@ -56,7 +60,7 @@ export default function AnimatedLogo() {
             key={index}
             ref={(el) => { if (el) Object.assign(el.style, getLetterStyle(el)); }}
             className="inline-block"
-            style={{ transformStyle: 'preserve-3d' }}
+            style={{ transformStyle: 'preserve-3d', color: letterColors[index % letterColors.length] }}
           >
             {letter === ' ' ? '\u00A0' : letter}
           </span>
@@ -66,7 +70,7 @@ export default function AnimatedLogo() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="text-xs text-stone-400 font-light tracking-wide mt-1"
+        className="text-sm text-emerald-600/60 font-light tracking-widest mt-2 uppercase"
       >
         Greener Business, Together
       </motion.p>
