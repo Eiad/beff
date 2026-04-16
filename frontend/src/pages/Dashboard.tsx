@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import { TrendingUp, TrendingDown, Leaf, Users, ShieldCheck, FileText, Plus, Download, ArrowRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Button } from '../components/ui/button';
 import PageTransition from '../components/PageTransition';
 import { SkeletonCard, SkeletonActivity } from '../components/Skeleton';
 import { useAuth } from '../contexts/AuthContext';
