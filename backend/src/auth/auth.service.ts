@@ -1,22 +1,35 @@
 import { Injectable, ConflictException, UnauthorizedException } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import { UsersService, SafeUser } from '../users/users.service';
+import { createHash, randomBytes, timingSafeEqual } from 'crypto';
 
-const SALT_ROUNDS = 10;
+// Pure Node.js crypto password hashing — no native dependencies, works on all serverless runtimes
+function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString('hex');
+  const hash = createHash('sha512').update(salt + password).digest('hex');
+  return `${salt}:${hash}`;
+}
+
+function verifyPassword(password: string, stored: string): boolean {
+  const [salt, hash] = stored.split(':');
+  const candidate = createHash('sha512').update(salt + password).digest('hex');
+  try {
+    return timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(candidate, 'hex'));
+  } catch {
+    return false;
+  }
+}
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersService: UsersService) {}
 
   async register(name: string, email: string, password: string): Promise<{ token: string; user: SafeUser }> {
-    // Check for duplicate email
     if (this.usersService.findByEmail(email)) {
       throw new ConflictException('An account with this email already exists');
     }
 
-    // Hash password asynchronously (never use sync to avoid blocking the event loop)
-    const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    const passwordHash = hashPassword(password);
     const user = this.usersService.create(name, email, passwordHash);
     const token = this.signToken(user);
 
@@ -24,11 +37,10 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<{ token: string; user: SafeUser }> {
-    // Use findByEmailWithHash to get the hash for comparison
     const record = this.usersService.findByEmailWithHash(email);
 
     // Return same 401 for unknown email OR wrong password — prevents user enumeration
-    if (!record || !(await bcrypt.compare(password, record.passwordHash))) {
+    if (!record || !verifyPassword(password, record.passwordHash)) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
