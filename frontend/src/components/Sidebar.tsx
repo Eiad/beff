@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Leaf, LayoutDashboard, User, LogOut, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { Leaf, LayoutDashboard, User, Shield, Bell, Lock, LogOut, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const NAV_ITEMS = [
   { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/profile', label: 'Profile', icon: User },
+  { path: '/security', label: 'Security', icon: Shield },
+  { path: '/notifications', label: 'Notifications', icon: Bell },
+  { path: '/privacy', label: 'Data & Privacy', icon: Lock },
 ];
 
 export default function Sidebar() {

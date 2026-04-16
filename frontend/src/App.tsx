@@ -8,6 +8,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+import Notifications from './pages/Notifications';
+import Privacy from './pages/Privacy';
 import NotFound from './pages/NotFound';
 
 export default function App() {
@@ -51,6 +54,36 @@ export default function App() {
             <ProtectedRoute>
               <AppShell>
                 <Profile />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/security"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <Settings />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <Notifications />
+              </AppShell>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/privacy"
+          element={
+            <ProtectedRoute>
+              <AppShell>
+                <Privacy />
               </AppShell>
             </ProtectedRoute>
           }
