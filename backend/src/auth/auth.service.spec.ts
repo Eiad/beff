@@ -1,19 +1,27 @@
+process.env.SQLITE_DB_PATH = ':memory:';
+process.env.JWT_SECRET = 'test-secret';
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
-
-// Set JWT_SECRET for tests
-process.env.JWT_SECRET = 'test-secret';
+import { DatabaseModule } from '../database/database.module';
 
 describe('AuthService', () => {
   let authService: AuthService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
+      imports: [DatabaseModule],
       providers: [AuthService, UsersService],
     }).compile();
+    await module.init();
     authService = module.get<AuthService>(AuthService);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('register()', () => {

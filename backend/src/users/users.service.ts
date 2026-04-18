@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto'; // Built-in Node.js — no package needed
+import { randomUUID } from 'crypto';
+import { DatabaseService } from '../database/database.service';
 
 // Internal user record — passwordHash stays inside this service
 interface UserRecord {
@@ -10,13 +11,21 @@ interface UserRecord {
   createdAt: string;
 }
 
+interface UserRow {
+  id: string;
+  name: string;
+  email: string;
+  password_hash: string;
+  created_at: string;
+}
+
 // Safe user type returned to controllers — no password
 export type SafeUser = Omit<UserRecord, 'passwordHash'>;
 
 @Injectable()
 export class UsersService {
-  // In-memory store — intentional for MVP (data resets on server restart)
-  private readonly users = new Map<string, UserRecord>();
+  // Persistent SQLite store — data survives restarts
+  constructor(private readonly database: DatabaseService) {}
 
   create(name: string, email: string, passwordHash: string): SafeUser {
     const user: UserRecord = {
@@ -26,40 +35,57 @@ export class UsersService {
       passwordHash,
       createdAt: new Date().toISOString(),
     };
-    this.users.set(user.id, user);
+    this.database.db
+      .prepare(
+        'INSERT INTO users (id, name, email, password_hash, created_at) VALUES (?, ?, ?, ?, ?)',
+      )
+      .run(user.id, user.name, user.email, user.passwordHash, user.createdAt);
     return this.toSafe(user);
   }
 
   findById(id: string): SafeUser | undefined {
-    const user = this.users.get(id);
-    return user ? this.toSafe(user) : undefined;
+    const row = this.database.db
+      .prepare('SELECT * FROM users WHERE id = ?')
+      .get(id) as UserRow | undefined;
+    return row ? this.toSafe(this.rowToRecord(row)) : undefined;
   }
 
   // Returns full record (including hash) — only used internally by AuthService
   findByEmailWithHash(email: string): UserRecord | undefined {
-    for (const user of this.users.values()) {
-      if (user.email.toLowerCase() === email.toLowerCase()) return user;
-    }
-    return undefined;
+    const row = this.database.db
+      .prepare('SELECT * FROM users WHERE LOWER(email) = LOWER(?)')
+      .get(email) as UserRow | undefined;
+    return row ? this.rowToRecord(row) : undefined;
   }
 
   findByEmail(email: string): SafeUser | undefined {
-    const user = this.findByEmailWithHash(email);
-    return user ? this.toSafe(user) : undefined;
+    const record = this.findByEmailWithHash(email);
+    return record ? this.toSafe(record) : undefined;
   }
 
   update(id: string, name: string): SafeUser | undefined {
-    const user = this.users.get(id);
-    if (!user) return undefined;
-    user.name = name;
-    return this.toSafe(user);
+    const result = this.database.db
+      .prepare('UPDATE users SET name = ? WHERE id = ?')
+      .run(name, id);
+    if (result.changes === 0) return undefined;
+    return this.findById(id);
   }
 
   delete(id: string): boolean {
-    return this.users.delete(id);
+    const result = this.database.db.prepare('DELETE FROM users WHERE id = ?').run(id);
+    return result.changes > 0;
   }
 
-  // Strip passwordHash before any data leaves this service
+  private rowToRecord(row: UserRow): UserRecord {
+    return {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      passwordHash: row.password_hash,
+      createdAt: row.created_at,
+    };
+  }
+
   private toSafe(user: UserRecord): SafeUser {
     const { passwordHash: _, ...safe } = user;
     return safe;
