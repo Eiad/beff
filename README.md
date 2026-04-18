@@ -64,7 +64,7 @@ npm run test:e2e      # Playwright E2E tests (starts both servers automatically)
 
 **Intentional simplifications** for this MVP:
 - **No passport stack** — replaced the full `passport + passport-jwt + JwtStrategy + PassportModule` chain with a single custom `JwtGuard` using `jsonwebtoken` directly. Fewer abstractions, same security.
-- **In-memory Map store** — `UsersService` stores users in a `Map<string, UserRecord>`. Data resets on server restart. Noted in code comments; swap for a real database when needed.
+- **SQLite via `better-sqlite3`** — `UsersService` persists to a single file at `SQLITE_DB_PATH` (default `backend/data/beff.sqlite`). Synchronous driver = zero async bleed into callers or tests. On VPS the file lives outside `git pull`'s reach (`backend/data/` is gitignored) and survives PM2 restarts. Vercel/serverless deploys would have an ephemeral filesystem — VPS is the canonical production target.
 - **`crypto.randomUUID()`** instead of the `uuid` package — Node.js built-in, avoids the ESM/CJS conflict Jest has with the uuid package.
 
 **Modules:**
