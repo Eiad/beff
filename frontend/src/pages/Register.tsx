@@ -67,7 +67,7 @@ export default function Register() {
         <div className="mb-6 sm:mb-10">
           <Link to="/" className="inline-flex items-center gap-2 font-serif text-2xl text-gray-900">
             <Leaf className="text-emerald-600" size={24} />
-            B-eff
+            Beff
           </Link>
         </div>
 

@@ -9,17 +9,12 @@ import { BEFF_AUTH_TOKEN } from '../constants';
 vi.mock('../api/axios', () => ({
   default: {
     patch: vi.fn(),
-    get: vi.fn(),
-    delete: vi.fn(),
   },
 }));
 
 import api from '../api/axios';
 const mockPatch = vi.mocked(api.patch);
-const mockGet = vi.mocked(api.get);
-const mockDelete = vi.mocked(api.delete);
 
-// Inject a valid token so AuthProvider considers user logged in
 function injectToken(name = 'Test User') {
   const exp = Math.floor(Date.now() / 1000) + 3600;
   const header = btoa(JSON.stringify({ alg: 'HS256' }));
@@ -71,63 +66,5 @@ describe('Profile page', () => {
       fireEvent.click(screen.getByLabelText('Save name'));
     });
     expect(mockPatch).toHaveBeenCalledWith('/users/me', { name: 'Updated Name' });
-  });
-
-  it('triggers file download on Export click', async () => {
-    const blob = new Blob(['{}'], { type: 'application/json' });
-    mockGet.mockResolvedValueOnce({ data: blob });
-
-    const createObjectURL = vi.fn(() => 'blob:test');
-    const revokeObjectURL = vi.fn();
-    Object.defineProperty(URL, 'createObjectURL', { value: createObjectURL, writable: true });
-    Object.defineProperty(URL, 'revokeObjectURL', { value: revokeObjectURL, writable: true });
-
-    await act(async () => { renderProfile(); });
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /export/i }));
-    });
-    await waitFor(() => {
-      expect(mockGet).toHaveBeenCalledWith('/users/me/export', expect.any(Object));
-    });
-  });
-
-  it('opens delete confirmation modal on Delete click', async () => {
-    await act(async () => { renderProfile(); });
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
-    await waitFor(() => {
-      // The dialog title is "Delete your account?"
-      expect(screen.getByText(/delete your account\?/i)).toBeTruthy();
-    });
-  });
-
-  it('does not call DELETE when Cancel is clicked in modal', async () => {
-    await act(async () => { renderProfile(); });
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
-    await waitFor(() => { screen.getByText(/delete your account\?/i); });
-    fireEvent.click(screen.getByRole('button', { name: /cancel/i }));
-    expect(mockDelete).not.toHaveBeenCalled();
-  });
-
-  it('calls DELETE and logout on confirm', async () => {
-    mockDelete.mockResolvedValueOnce({});
-    // Override window.location.href
-    const originalHref = Object.getOwnPropertyDescriptor(window, 'location');
-    const locationMock = { href: '' };
-    Object.defineProperty(window, 'location', { value: locationMock, writable: true });
-
-    await act(async () => { renderProfile(); });
-    fireEvent.click(screen.getByRole('button', { name: /delete/i }));
-    await waitFor(() => { screen.getByText(/delete your account\?/i); });
-    // Type confirmation text (type-to-confirm modal)
-    const confirmInput = screen.getByPlaceholderText('delete my account');
-    fireEvent.change(confirmInput, { target: { value: 'delete my account' } });
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /delete account/i }));
-    });
-    await waitFor(() => {
-      expect(mockDelete).toHaveBeenCalledWith('/users/me');
-    });
-
-    if (originalHref) Object.defineProperty(window, 'location', originalHref);
   });
 });

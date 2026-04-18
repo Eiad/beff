@@ -16,7 +16,7 @@ export default function Profile() {
   const [savingName, setSavingName] = useState(false);
   const [nameError, setNameError] = useState('');
 
-  useEffect(() => { document.title = 'Profile \u2014 B-eff'; }, []);
+  useEffect(() => { document.title = 'Profile \u2014 Beff'; }, []);
 
   useEffect(() => {
     if (!editing) return;

@@ -8,7 +8,7 @@ const NOTIFICATION_PREFS = [
   { id: 'email-reports', label: 'Email reports', description: 'Receive weekly sustainability reports via email' },
   { id: 'compliance-alerts', label: 'Compliance alerts', description: 'Get notified about regulatory changes' },
   { id: 'team-updates', label: 'Team updates', description: 'Notifications when teams hit milestones' },
-  { id: 'product-updates', label: 'Product updates', description: 'News about B-eff features and improvements' },
+  { id: 'product-updates', label: 'Product updates', description: 'News about Beff features and improvements' },
 ];
 
 export default function Notifications() {
@@ -21,7 +21,7 @@ export default function Notifications() {
   });
 
   useEffect(() => {
-    document.title = 'Notifications \u2014 B-eff';
+    document.title = 'Notifications \u2014 Beff';
   }, []);
 
   const toggle = (id: string) => {

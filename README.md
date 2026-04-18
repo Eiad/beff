@@ -1,6 +1,8 @@
-# B-eff — Pre-Launch SaaS MVP
+# Beff — Pre-Launch SaaS MVP
 
-A pre-launch B2B sustainability platform. Built as an interview assignment for [B-eff.com](https://beff.com).
+A pre-launch B2B sustainability platform. Built as an interview assignment for [Beff.com](https://beff.com).
+
+**Figma:** [beff-task design file](https://www.figma.com/design/LPbDwllvoYO7ab3OVc8AfV/beff-task)
 
 ---
 

@@ -35,7 +35,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = 'Dashboard \u2014 B-eff';
+    document.title = 'Dashboard \u2014 Beff';
     const timer = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(timer);
   }, []);

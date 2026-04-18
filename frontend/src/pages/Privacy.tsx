@@ -26,7 +26,7 @@ export default function Privacy() {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    document.title = 'Data & Privacy \u2014 B-eff';
+    document.title = 'Data & Privacy \u2014 Beff';
   }, []);
 
   const handleExport = async () => {
@@ -78,7 +78,7 @@ export default function Privacy() {
               <div>
                 <p className="text-sm font-medium text-gray-800">Export your data</p>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  Download a copy of all the data B-eff holds about your account.
+                  Download a copy of all the data Beff holds about your account.
                 </p>
               </div>
               <Button
@@ -147,7 +147,7 @@ export default function Privacy() {
         onClose={() => setDeleteOpen(false)}
         onConfirm={handleDelete}
         title="Delete your account?"
-        description="This will permanently delete your B-eff account and all your data. This action cannot be undone."
+        description="This will permanently delete your Beff account and all your data. This action cannot be undone."
         confirmLabel="Delete Account"
         confirmText="delete my account"
         loading={deleteLoading}

@@ -7,7 +7,7 @@ import PageTransition from '../components/PageTransition';
 
 export default function Settings() {
   useEffect(() => {
-    document.title = 'Security \u2014 B-eff';
+    document.title = 'Security \u2014 Beff';
   }, []);
 
   return (

@@ -1,13 +1,13 @@
 import { useState, useRef } from 'react';
 import { motion } from 'motion/react';
 
-// Ported from code-park — stripped next-intl, rebranded to B-eff
+// Ported from code-park — stripped next-intl, rebranded to Beff
 export default function AnimatedLogo() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const text = 'B-eff';
+  const text = 'Beff';
   const letters = text.split('');
   const letterColors = ['#047857', '#059669', '#0d9488', '#0f766e', '#10b981'];
 

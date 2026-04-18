@@ -57,7 +57,7 @@ export default function Login() {
         <div className="mb-6 sm:mb-10">
           <Link to="/" className="inline-flex items-center gap-2 font-serif text-2xl text-gray-900">
             <Leaf className="text-emerald-600" size={24} />
-            B-eff
+            Beff
           </Link>
         </div>
 
@@ -75,7 +75,7 @@ export default function Login() {
           transition={{ duration: 0.3, delay: 0.02 }}
           className="text-gray-500 mb-8"
         >
-          Sign in to your B-eff account.
+          Sign in to your Beff account.
         </motion.p>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">

@@ -39,7 +39,7 @@ export default function Sidebar() {
     <div className="flex flex-col h-full">
       <div className={`flex items-center h-16 px-4 border-b border-gray-100 ${collapsed ? 'justify-center' : 'gap-2'}`}>
         <Leaf size={22} className="text-emerald-600 shrink-0" />
-        {!collapsed && <span className="font-serif text-lg font-semibold text-gray-900">B-eff</span>}
+        {!collapsed && <span className="font-serif text-lg font-semibold text-gray-900">Beff</span>}
       </div>
 
       <nav className="flex-1 py-4 px-2 space-y-1">

@@ -21,7 +21,7 @@ const FEATURE_DETAILS: Record<FeatureKey, FeatureDetails> = {
     description:
       'Real-time CO\u2082 tracking across your fleet and operations. Understand your footprint with actionable insights, not just raw data.',
     detailedDescription:
-      'B-eff\u2019s Carbon Intelligence module gives your organisation a live, data-driven view of emissions across Scope 1, 2, and 3. Instead of spreadsheets and quarterly surprises, your teams get continuous monitoring with automated alerts when thresholds are crossed.',
+      'Beff\u2019s Carbon Intelligence module gives your organisation a live, data-driven view of emissions across Scope 1, 2, and 3. Instead of spreadsheets and quarterly surprises, your teams get continuous monitoring with automated alerts when thresholds are crossed.',
     capabilities: [
       'Real-time fleet and facility emissions tracking',
       'Scope 1, 2, and 3 emissions breakdown',
@@ -44,9 +44,9 @@ const FEATURE_DETAILS: Record<FeatureKey, FeatureDetails> = {
   compliance: {
     title: 'Compliance Automation',
     description:
-      'Stay ahead of ESG regulations automatically. B-eff monitors regulatory changes and keeps your reports audit-ready.',
+      'Stay ahead of ESG regulations automatically. Beff monitors regulatory changes and keeps your reports audit-ready.',
     detailedDescription:
-      'Regulatory landscapes shift constantly. B-eff\u2019s Compliance Automation watches for changes to CSRD, GHG Protocol, ISO 14001, and dozens of other frameworks \u2014 then maps them to your reporting obligations so nothing slips through.',
+      'Regulatory landscapes shift constantly. Beff\u2019s Compliance Automation watches for changes to CSRD, GHG Protocol, ISO 14001, and dozens of other frameworks \u2014 then maps them to your reporting obligations so nothing slips through.',
     capabilities: [
       'Automated regulatory change monitoring',
       'Audit-ready report generation',
@@ -71,7 +71,7 @@ const FEATURE_DETAILS: Record<FeatureKey, FeatureDetails> = {
     description:
       'Enroll teams, set sustainability goals, and celebrate milestones. Green culture starts with visibility and recognition.',
     detailedDescription:
-      'Sustainability targets only work when people buy in. B-eff\u2019s Team Engagement tools let you set department-level goals, run challenges, and publicly recognise the teams making the biggest impact \u2014 turning green goals into a shared mission.',
+      'Sustainability targets only work when people buy in. Beff\u2019s Team Engagement tools let you set department-level goals, run challenges, and publicly recognise the teams making the biggest impact \u2014 turning green goals into a shared mission.',
     capabilities: [
       'Department and team goal setting',
       'Milestone tracking with progress dashboards',

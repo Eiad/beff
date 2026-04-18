@@ -23,7 +23,7 @@ const FEATURES: { icon: typeof BarChart2; title: string; description: string; ke
     icon: Shield,
     key: 'compliance',
     title: 'Compliance Automation',
-    description: 'Stay ahead of ESG regulations automatically. B-eff monitors regulatory changes and keeps your reports audit-ready.',
+    description: 'Stay ahead of ESG regulations automatically. Beff monitors regulatory changes and keeps your reports audit-ready.',
     accent: { bg: 'bg-blue-50', text: 'text-blue-600', border: 'from-blue-200 via-sky-100 to-blue-200' },
     num: '02',
   },
@@ -47,7 +47,7 @@ export default function Landing() {
   };
 
   useEffect(() => {
-    document.title = 'B-eff | Greener Business, Together';
+    document.title = 'Beff | Greener Business, Together';
   }, []);
 
   return (
@@ -140,7 +140,7 @@ export default function Landing() {
             Everything your team needs to <span className="text-gradient-emerald">go green</span>
           </h2>
           <p className="text-gray-500 max-w-lg mx-auto">
-            B-eff brings sustainability metrics, compliance, and engagement into one platform designed for modern B2B teams.
+            Beff brings sustainability metrics, compliance, and engagement into one platform designed for modern B2B teams.
           </p>
         </motion.div>
 
@@ -193,11 +193,11 @@ export default function Landing() {
               <Leaf size={24} className="text-white" />
             </div>
             <h2 className="text-3xl sm:text-4xl font-serif font-normal text-gray-900 mb-4">
-              Why <span className="text-gradient-emerald">B-eff</span>?
+              Why <span className="text-gradient-emerald">Beff</span>?
             </h2>
             <p className="text-gray-500 leading-relaxed mb-4 text-lg">
               Sustainability shouldn&apos;t be a compliance checkbox. It should be a <strong className="text-gray-700">competitive advantage</strong>.
-              B-eff is built for the companies that understand this — and want the tools to act on it.
+              Beff is built for the companies that understand this — and want the tools to act on it.
             </p>
             <p className="text-gray-500 leading-relaxed">
               We&apos;re in pre-launch, working closely with our early access partners to build exactly what
@@ -244,7 +244,7 @@ export default function Landing() {
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <Leaf size={14} className="text-emerald-600" />
-            <span className="font-serif">B-eff</span>
+            <span className="font-serif">Beff</span>
           </div>
           <div className="flex items-center gap-4">
             <a
@@ -264,7 +264,7 @@ export default function Landing() {
               LinkedIn
             </a>
           </div>
-          <p>© {new Date().getFullYear()} B-eff. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Beff. All rights reserved.</p>
         </div>
       </footer>
     </div>
