@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Beff — How it was built</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --card: #ffffff;
+        --emerald: #059669;
+        --emerald-soft: #ecfdf5;
+        --emerald-border: #d1fae5;
+        --amber: #d97706;
+        --blue: #2563eb;
+        --violet: #7c3aed;
+        --red: #dc2626;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 48px 24px 96px; }
+      header { margin-bottom: 40px; }
+      .brand {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: 'Playfair Display', serif;
+        font-size: 24px; font-weight: 600;
+      }
+      .leaf {
+        width: 24px; height: 24px;
+        background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+        border-radius: 6px;
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #fff;
+      }
+      .leaf svg { width: 14px; height: 14px; }
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 40px; font-weight: 600; line-height: 1.15;
+        margin: 28px 0 12px;
+      }
+      h1 .em { background: linear-gradient(135deg, #059669 0%, #0d9488 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .lede { color: var(--muted); font-size: 17px; max-width: 620px; }
+      .chip {
+        display: inline-block; font-size: 12px; font-weight: 500;
+        color: var(--emerald); background: var(--emerald-soft);
+        border: 1px solid var(--emerald-border);
+        padding: 4px 10px; border-radius: 999px; margin-bottom: 8px;
+      }
+      h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 26px; font-weight: 600;
+        margin: 56px 0 8px;
+      }
+      h2 .num {
+        display: inline-block; width: 28px; height: 28px; line-height: 28px;
+        font-family: 'Inter'; font-size: 13px; font-weight: 600;
+        text-align: center; color: var(--emerald);
+        background: var(--emerald-soft); border-radius: 8px;
+        margin-right: 10px; vertical-align: 3px;
+      }
+      h3 {
+        font-size: 15px; font-weight: 600; margin: 20px 0 6px;
+        letter-spacing: -0.01em;
+      }
+      p { margin: 8px 0 12px; color: #334155; }
+      ul { margin: 6px 0 12px; padding-left: 20px; }
+      li { margin: 4px 0; color: #334155; }
+      li::marker { color: var(--muted); }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px;
+        margin: 16px 0;
+      }
+      .card.soft { background: var(--emerald-soft); border-color: var(--emerald-border); }
+      code, .mono {
+        font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+        font-size: 13px;
+      }
+      code {
+        background: #f1f5f9; padding: 1.5px 6px; border-radius: 4px;
+        color: #0f172a;
+      }
+      .endpoints { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 8px; font-size: 14px; }
+      .endpoints th, .endpoints td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+      .endpoints th { color: var(--muted); font-weight: 500; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+      .endpoints tr:last-child td { border-bottom: 0; }
+      .method {
+        display: inline-block; font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600;
+        padding: 2px 8px; border-radius: 4px;
+      }
+      .m-post { color: #047857; background: #d1fae5; }
+      .m-get { color: #1d4ed8; background: #dbeafe; }
+      .m-patch { color: #b45309; background: #fef3c7; }
+      .m-delete { color: #b91c1c; background: #fee2e2; }
+      .check {
+        display: flex; gap: 10px; align-items: flex-start; padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .check:last-child { border-bottom: 0; }
+      .check .tick {
+        flex-shrink: 0; width: 20px; height: 20px; border-radius: 999px;
+        background: var(--emerald-soft); color: var(--emerald);
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 700; margin-top: 2px;
+      }
+      .check .label { font-weight: 500; }
+      .check .detail { color: var(--muted); font-size: 14px; }
+      .flow {
+        display: grid; gap: 10px; margin: 12px 0;
+      }
+      .step {
+        display: flex; gap: 12px; align-items: flex-start;
+        padding: 10px 14px; background: #fff; border: 1px solid var(--line); border-radius: 10px;
+      }
+      .step .n {
+        flex-shrink: 0; width: 24px; height: 24px; border-radius: 999px;
+        background: var(--emerald); color: #fff;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 600;
+      }
+      .step .body { flex: 1; font-size: 14px; }
+      .step .body strong { color: var(--ink); }
+      .links {
+        display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;
+      }
+      .pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px;
+        color: var(--ink); text-decoration: none; font-size: 13px; font-weight: 500;
+        background: #fff;
+      }
+      .pill:hover { border-color: var(--emerald); color: var(--emerald); }
+      footer {
+        margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line);
+        font-size: 13px; color: var(--muted);
+      }
+      footer a { color: var(--emerald); text-decoration: none; }
+      .two {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+      }
+      @media (max-width: 600px) {
+        .wrap { padding: 32px 18px 64px; }
+        h1 { font-size: 32px; }
+        .two { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <a class="brand" href="/">
+          <span class="leaf" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.3c1 1 1 10.7-1 15.7-1.3 3.2-3.2 4-5.2 3"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </span>
+          Beff
+        </a>
+
+        <span class="chip" style="margin-top: 24px;">Technical write-up</span>
+        <h1>How <span class="em">Beff</span> was built</h1>
+        <p class="lede">
+          A quick tour of the auth flow, the database layer, the GDPR features,
+          and where each line item of the assignment lives in the code.
+        </p>
+        <div class="links">
+          <a class="pill" href="https://github.com/Eiad/beff" target="_blank" rel="noopener">GitHub repo</a>
+          <a class="pill" href="https://www.figma.com/design/LPbDwllvoYO7ab3OVc8AfV/beff-task" target="_blank" rel="noopener">Figma</a>
+          <a class="pill" href="/">Live site</a>
+        </div>
+      </header>
+
+      <!-- 1. AUTH FLOW -->
+      <section>
+        <h2><span class="num">1</span>Login &amp; authentication</h2>
+        <p>
+          Stateless JWT auth. No Passport, no sessions, no cookies — just a signed token in
+          <code>localStorage</code>, attached to every API request via an Axios interceptor.
+        </p>
+
+        <h3>Register / Login round trip</h3>
+        <div class="flow">
+          <div class="step"><span class="n">1</span><span class="body"><strong>Client</strong> submits name / email / password. <code>react-hook-form</code> + <code>zod</code> validates the shape before a request is ever made.</span></div>
+          <div class="step"><span class="n">2</span><span class="body"><strong>NestJS</strong> re-validates server-side with the same <code>zod</code> schema (via a custom <code>ZodValidationPipe</code>). No trust in client validation.</span></div>
+          <div class="step"><span class="n">3</span><span class="body"><strong>AuthService</strong> hashes the password with <code>bcrypt</code> (10 rounds) and persists the user row to SQLite.</span></div>
+          <div class="step"><span class="n">4</span><span class="body"><strong>JWT</strong> signed with <code>HS256</code>, 7-day expiry, returned alongside the safe user object (no <code>passwordHash</code> ever leaves the service).</span></div>
+          <div class="step"><span class="n">5</span><span class="body"><strong>Client</strong> stores the token, decodes it locally with <code>jwt-decode</code>, and checks <code>exp</code> on every mount — no network call needed to know if the user is signed in.</span></div>
+        </div>
+
+        <h3>Protecting private routes</h3>
+        <ul>
+          <li><code>JwtGuard</code> on every <code>/users/*</code> endpoint verifies the token and looks the user up in the DB — if the user was deleted, the token is effectively invalidated (401 returned).</li>
+          <li>Frontend <code>ProtectedRoute</code> waits for auth hydration before rendering to avoid the "logged-in UI flashes then disappears" problem.</li>
+          <li>Axios response interceptor clears the token and redirects to <code>/login</code> on any 401 except auth endpoints (so a bad login doesn't trigger a redirect loop).</li>
+        </ul>
+
+        <h3>Security choices worth naming</h3>
+        <ul>
+          <li><strong>Same 401 for wrong password and unknown email</strong> — no user enumeration via error differences.</li>
+          <li><strong>Password hashes never leave <code>UsersService</code></strong> — all returns are typed <code>Omit&lt;User, 'passwordHash'&gt;</code>.</li>
+          <li><strong><code>aria-live="polite"</code></strong> on form errors so screen readers announce 409/401 responses without stealing focus.</li>
+        </ul>
+      </section>
+
+      <!-- 2. DATABASE -->
+      <section>
+        <h2><span class="num">2</span>Database — SQLite via <code>better-sqlite3</code></h2>
+        <p>
+          Started as an in-memory <code>Map&lt;string, UserRecord&gt;</code> — simple and functional per the brief,
+          but accounts wiped on every PM2 restart. Upgraded to a single-file SQLite store so signups actually survive
+          a redeploy.
+        </p>
+
+        <div class="card">
+          <h3 style="margin-top: 0;">Why this driver</h3>
+          <ul style="margin-bottom: 0;">
+            <li><code>better-sqlite3</code> is <strong>synchronous</strong> — kept the entire <code>UsersService</code> API sync, no async cascade into <code>AuthService</code>, <code>JwtGuard</code>, or any test.</li>
+            <li>Prebuilt native binaries for Node 22 — no <code>node-gyp</code>, no build-essential on the VPS.</li>
+            <li>Single writer, WAL journal mode — durable across crashes, fine for this workload.</li>
+          </ul>
+        </div>
+
+        <h3>What's on disk</h3>
+        <ul>
+          <li>One table: <code>users (id, name, email, password_hash, created_at)</code>.</li>
+          <li>Expression index on <code>LOWER(email)</code> — case-insensitive lookups without a unique constraint (Node's single-threaded event loop + sync driver means the app-level duplicate check in <code>AuthService</code> is race-free).</li>
+          <li>DB file at <code>/root/beff/backend/data/beff.sqlite</code> on the VPS. <code>backend/data/</code> is <code>.gitignore</code>d so <code>git pull</code> never touches production data.</li>
+        </ul>
+
+        <h3>Lifecycle</h3>
+        <ul>
+          <li><code>DatabaseService.onModuleInit</code> opens the connection, applies <code>journal_mode = WAL</code> + <code>foreign_keys = ON</code>, runs <code>CREATE TABLE IF NOT EXISTS</code>.</li>
+          <li><code>app.enableShutdownHooks()</code> ensures <code>onModuleDestroy</code> fires on <code>SIGTERM</code> (what PM2 sends on restart) — connection closes cleanly, no WAL leftovers.</li>
+          <li>Tests use <code>SQLITE_DB_PATH=:memory:</code> so each test gets a fresh isolated DB — no fixtures to clean up.</li>
+        </ul>
+      </section>
+
+      <!-- 3. GDPR -->
+      <section>
+        <h2><span class="num">3</span>GDPR features</h2>
+        <p>Two user-facing rights, both exposed on <code>/privacy</code> behind the JWT guard.</p>
+
+        <div class="two">
+          <div class="card">
+            <h3 style="margin-top: 0;">Right to data portability</h3>
+            <p style="margin: 6px 0 0;">
+              <code>GET /users/me/export</code> returns the user's stored data as a JSON blob with
+              <code>Content-Disposition: attachment</code>, so the browser downloads it as
+              <code>beff-data-export-&lt;date&gt;.json</code>.
+            </p>
+          </div>
+          <div class="card">
+            <h3 style="margin-top: 0;">Right to erasure</h3>
+            <p style="margin: 6px 0 0;">
+              <code>DELETE /users/me</code> removes the row from SQLite. The JWT the user still holds becomes immediately useless because <code>JwtGuard</code> re-checks the DB on every request — no row, no access.
+            </p>
+          </div>
+        </div>
+
+        <p style="margin-top: 16px;">
+          Deletion uses a <strong>type-to-confirm</strong> modal ("type <code>delete my account</code>") —
+          standard UX guardrail against accidental clicks.
+        </p>
+      </section>
+
+      <!-- 4. API surface -->
+      <section>
+        <h2><span class="num">4</span>API surface</h2>
+        <table class="endpoints">
+          <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><span class="method m-post">POST</span></td><td><code>/auth/register</code></td><td>Create account, return token</td></tr>
+            <tr><td><span class="method m-post">POST</span></td><td><code>/auth/login</code></td><td>Exchange creds for token</td></tr>
+            <tr><td><span class="method m-get">GET</span></td><td><code>/users/me</code></td><td>Current user</td></tr>
+            <tr><td><span class="method m-patch">PATCH</span></td><td><code>/users/me</code></td><td>Update display name</td></tr>
+            <tr><td><span class="method m-get">GET</span></td><td><code>/users/me/export</code></td><td>GDPR data export</td></tr>
+            <tr><td><span class="method m-delete">DELETE</span></td><td><code>/users/me</code></td><td>GDPR account erasure</td></tr>
+            <tr><td><span class="method m-get">GET</span></td><td><code>/health</code></td><td>Health probe</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 5. ASSIGNMENT CHECKLIST -->
+      <section>
+        <h2><span class="num">5</span>Mapping to the assignment brief</h2>
+        <p>Direct mapping from each line item in the task PDF to where it lives in the code.</p>
+
+        <div class="card">
+          <div class="check"><span class="tick">✓</span><div><div class="label">Responsive landing page</div><div class="detail">React 19 + Tailwind v4 + shadcn/ui. Animated hero logo, 3D geometric canvas grid, features grid, CTA. Mobile verified via Playwright + axe-core.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Register / Login onboarding</div><div class="detail">Split-screen auth layout. <code>react-hook-form</code> + <code>zod</code>. 401 interceptor + hydration-safe route guards.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Responsive user dashboard</div><div class="detail">Sidebar shell, 4 B2B stat cards (CO₂, Teams, Compliance, Reports), recent activity timeline, quick actions.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Profile page with two GDPR features</div><div class="detail">Data portability (<code>GET /users/me/export</code>) + right to erasure (<code>DELETE /users/me</code>) with type-to-confirm modal.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Clean structure, responsive, accessible</div><div class="detail">axe-core audits pass on all 5 pages (zero violations).</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">NestJS backend with validation</div><div class="detail"><code>AuthModule</code> + <code>UsersModule</code>. Zod pipe validates every request body server-side.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Source on GitHub, README</div><div class="detail"><a href="https://github.com/Eiad/beff" target="_blank" rel="noopener">github.com/Eiad/beff</a>. README documents design choices, architecture, tests.</div></div></div>
+          <div class="check"><span class="tick">✓</span><div><div class="label">Figma (bonus)</div><div class="detail"><a href="https://www.figma.com/design/LPbDwllvoYO7ab3OVc8AfV/beff-task" target="_blank" rel="noopener">Figma file</a> with the design system.</div></div></div>
+        </div>
+
+        <h3>Beyond the brief</h3>
+        <ul>
+          <li>Full unit + e2e test suite (Jest + supertest for backend, Vitest + Playwright for frontend, axe-core accessibility audit).</li>
+          <li>Persistence across server restarts via SQLite (brief said "simple and functional"; in-memory would have satisfied it — went further for reviewer experience).</li>
+          <li>Toast system, page transitions, skeleton loaders, type-to-confirm deletion.</li>
+          <li>Deployed to a VPS (Hetzner) behind Nginx with PM2, not Vercel — chosen for persistence and because the Vercel lambda filesystem is ephemeral.</li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Beff — pre-launch B2B sustainability platform.
+          Built by <a href="https://github.com/Eiad" target="_blank" rel="noopener">Ash</a>
+          as an interview assignment for <a href="https://beff.com" target="_blank" rel="noopener">Beff</a>.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
