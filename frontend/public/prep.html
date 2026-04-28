@@ -258,6 +258,9 @@
         <div class="say">
           GDPR says people must be able to take their data out and delete their account. I built both. Download gives a JSON file. Delete asks for a confirm first, removes the user, and <em>the old token stops working at once</em>.
         </div>
+        <div class="say" style="background: var(--amber-soft); border-color: var(--amber-border); border-left-color: #d97706;">
+          <strong>Bonus point to mention:</strong> the task said "support onboarding <em>and offboarding</em>." Onboarding is register and login. <em>Offboarding is leaving for good</em> — and that is exactly what my delete-account and data-export features do. So the two GDPR features also cover the offboarding requirement.
+        </div>
       </section>
 
       <!-- 5 ─────────────────────────────────────────────────────────────── -->
@@ -370,6 +373,10 @@
           <div class="card">
             <p class="q">"How is the password stored?"</p>
             <p class="a">Hashed with bcrypt. Never plain text. The hash never leaves the user service — even the export feature strips it out.</p>
+          </div>
+          <div class="card">
+            <p class="q">"What is offboarding? Did you build it?"</p>
+            <p class="a">Offboarding is when a user leaves for good — not just logging out. Logout ends a session. Offboarding deletes the account. Yes, I built it: the user can download their data as a file, then delete their account. The old token stops working right away.</p>
           </div>
         </div>
       </section>
