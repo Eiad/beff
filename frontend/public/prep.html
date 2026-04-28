@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Beff — Interview prep</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fafaf8;
+        --ink: #0f172a;
+        --muted: #64748b;
+        --line: #e5e7eb;
+        --card: #ffffff;
+        --emerald: #059669;
+        --emerald-soft: #ecfdf5;
+        --emerald-border: #d1fae5;
+        --amber-soft: #fffbeb;
+        --amber-border: #fde68a;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 760px; margin: 0 auto; padding: 40px 22px 96px; }
+
+      header { margin-bottom: 28px; }
+      .brand {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: 'Playfair Display', serif;
+        font-size: 22px; font-weight: 600;
+      }
+      .leaf {
+        width: 24px; height: 24px;
+        background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+        border-radius: 6px;
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #fff;
+      }
+      .leaf svg { width: 14px; height: 14px; }
+      .chip {
+        display: inline-block; font-size: 12px; font-weight: 500;
+        color: var(--emerald); background: var(--emerald-soft);
+        border: 1px solid var(--emerald-border);
+        padding: 4px 10px; border-radius: 999px; margin: 18px 0 10px;
+      }
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 36px; font-weight: 600; line-height: 1.15;
+        margin: 6px 0 10px;
+      }
+      h1 .em {
+        background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      .lede { color: var(--muted); font-size: 16px; max-width: 600px; }
+
+      section { margin-top: 44px; scroll-margin-top: 24px; }
+      h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 24px; font-weight: 600;
+        margin: 0 0 6px;
+        display: flex; align-items: center; gap: 12px;
+      }
+      h2 .num {
+        flex-shrink: 0;
+        width: 30px; height: 30px;
+        font-family: 'Inter'; font-size: 13px; font-weight: 600;
+        display: inline-flex; align-items: center; justify-content: center;
+        color: var(--emerald);
+        background: var(--emerald-soft);
+        border: 1px solid var(--emerald-border);
+        border-radius: 8px;
+      }
+      .sub { color: var(--muted); font-size: 14px; margin: 0 0 14px 42px; }
+
+      ul { margin: 6px 0 14px 42px; padding: 0; list-style: none; }
+      ul li {
+        position: relative;
+        padding-left: 18px;
+        margin-bottom: 6px;
+      }
+      ul li::before {
+        content: "";
+        position: absolute;
+        left: 2px; top: 12px;
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: var(--emerald);
+        opacity: 0.7;
+      }
+      ul li b { font-weight: 600; }
+
+      .say {
+        margin: 14px 0 0 42px;
+        padding: 14px 16px 14px 44px;
+        background: var(--emerald-soft);
+        border: 1px solid var(--emerald-border);
+        border-left: 3px solid var(--emerald);
+        border-radius: 10px;
+        position: relative;
+        font-size: 15.5px;
+        line-height: 1.65;
+      }
+      .say::before {
+        content: "🎙";
+        position: absolute;
+        left: 14px; top: 12px;
+        font-size: 16px;
+      }
+      .say em { color: var(--emerald); font-style: normal; font-weight: 600; }
+
+      .qa {
+        margin-left: 42px;
+        display: grid; gap: 10px;
+      }
+      .qa .card {
+        border: 1px solid var(--line);
+        background: var(--card);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .qa .q {
+        font-weight: 600; font-size: 14px; margin: 0 0 4px;
+      }
+      .qa .a {
+        font-size: 14.5px; color: #1f2937; margin: 0;
+      }
+
+      .links {
+        margin: 14px 0 0 42px;
+        display: flex; flex-wrap: wrap; gap: 8px;
+      }
+      .links a {
+        display: inline-block;
+        padding: 8px 12px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        border-radius: 8px;
+        font-size: 13px;
+        text-decoration: none;
+        color: var(--ink);
+      }
+      .links a:hover { border-color: var(--emerald-border); background: var(--emerald-soft); }
+
+      code {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 13px;
+        background: #f3f4f6;
+        padding: 1px 6px;
+        border-radius: 4px;
+      }
+
+      .footnote {
+        margin-top: 56px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      @media (max-width: 600px) {
+        .wrap { padding: 28px 16px 72px; }
+        h1 { font-size: 30px; }
+        h2 { font-size: 21px; }
+        h2 .num { width: 26px; height: 26px; font-size: 12px; }
+        .sub, ul, .say, .qa, .links { margin-left: 0; }
+        .say { padding-left: 40px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <header>
+        <div class="brand">
+          <span class="leaf" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13c0-5 4.5-9 11-12 0 6-2 9-5 11"/><path d="M12 20s-2-4 0-8 7-3 7-3"/></svg>
+          </span>
+          Beff
+        </div>
+        <span class="chip">Interview prep — read while you talk</span>
+        <h1>Your <span class="em">talking guide</span> for the Beff project</h1>
+        <p class="lede">Short bullets to glance at. A short line you can read out loud if you freeze. Keep this open on your phone or a second tab.</p>
+      </header>
+
+      <!-- 1 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">1</span>The 30-second pitch</h2>
+        <p class="sub">Start with this when they say "tell me about your project."</p>
+        <ul>
+          <li>Beff is a <b>pre-launch B2B website</b> for a green-tech company.</li>
+          <li>The task: build a <b>landing page, sign-up, login, dashboard, and profile</b>.</li>
+          <li>The profile must include <b>two GDPR features</b> — I built data export and account delete.</li>
+          <li>I built the <b>frontend with React</b> and the <b>backend with NestJS</b>.</li>
+          <li>It is <b>live on my server</b> at bff.i-ash.com, with real user sign-up and login.</li>
+        </ul>
+        <div class="say">
+          I built a small SaaS web app for a green-tech startup that has not launched yet. It has a landing page, sign-up, login, a dashboard, and a profile page with two privacy features. The frontend is React, the backend is NestJS, and it is <em>live on my own server</em>.
+        </div>
+      </section>
+
+      <!-- 2 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">2</span>The frontend</h2>
+        <p class="sub">If they ask "what did you use?" — keep the words simple.</p>
+        <ul>
+          <li><b>React with TypeScript</b> for the pages.</li>
+          <li><b>Tailwind CSS</b> for styling — it lets me design fast.</li>
+          <li><b>Vite</b> as the build tool. It is faster than older tools.</li>
+          <li>I used <b>shadcn/ui</b> — small, ready-made components I copy into my code.</li>
+          <li>The forms use <b>react-hook-form + zod</b>. Zod checks the input on the screen.</li>
+        </ul>
+        <div class="say">
+          The frontend is React with TypeScript, styled with Tailwind. I used a small set of ready-made components called shadcn so the design feels clean. <em>Forms are validated on both sides</em> — in the browser and on the server.
+        </div>
+      </section>
+
+      <!-- 3 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">3</span>The backend</h2>
+        <p class="sub">In plain words. Skip the deep tech unless they push.</p>
+        <ul>
+          <li><b>NestJS</b> — a Node.js framework that keeps the code tidy.</li>
+          <li>It has <b>two main parts</b>: one for sign-up and login, one for the user profile.</li>
+          <li>Passwords are <b>hashed with bcrypt</b> — never saved as plain text.</li>
+          <li>After login the server gives back a <b>token (JWT)</b>. The browser sends it on every request.</li>
+          <li>Users are saved in a <b>small file database called SQLite</b>. It survives restarts.</li>
+        </ul>
+        <div class="say">
+          The backend is NestJS. When a user signs up, I hash the password with bcrypt and save the user in a small SQLite database. Login gives back a token. The browser sends that token on every request to <em>prove who the user is</em>.
+        </div>
+      </section>
+
+      <!-- 4 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">4</span>The two GDPR features</h2>
+        <p class="sub">This is what the task asked for. Be ready to demo.</p>
+        <ul>
+          <li><b>Download my data</b> — the user gets a JSON file with their info. <code>GET /users/me/export</code></li>
+          <li><b>Delete my account</b> — removes the user. A pop-up asks them to confirm first. <code>DELETE /users/me</code></li>
+          <li>Both pages live under <b>/privacy</b> in the app.</li>
+          <li>After delete, the old token <b>stops working right away</b> — the server checks the user still exists.</li>
+          <li>Both features show a <b>toast message</b> so the user knows what happened.</li>
+        </ul>
+        <div class="say">
+          GDPR says people must be able to take their data out and delete their account. I built both. Download gives a JSON file. Delete asks for a confirm first, removes the user, and <em>the old token stops working at once</em>.
+        </div>
+      </section>
+
+      <!-- 5 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">5</span>Testing — the QA part</h2>
+        <p class="sub">This is your big section. Take your time here.</p>
+
+        <h3 style="font-size: 15px; margin: 16px 0 4px 42px;">Backend tests</h3>
+        <ul>
+          <li><b>Unit tests</b> — I test one piece of code on its own. Fast and small.</li>
+          <li><b>End-to-end tests</b> — I start the real server and call it like a real user. Slower, but real.</li>
+          <li>I cover <b>register, login, get profile, edit name, export, delete</b>.</li>
+          <li>I test the <b>error paths too</b> — wrong password, missing token, deleted user.</li>
+        </ul>
+
+        <h3 style="font-size: 15px; margin: 18px 0 4px 42px;">Frontend tests</h3>
+        <ul>
+          <li><b>Component tests</b> with Vitest — I check that each page shows what it should.</li>
+          <li><b>Browser tests</b> with Playwright — a real browser clicks through sign-up, login, profile.</li>
+          <li>I also <b>test the redirects</b> — a logged-out user sent to login, a logged-in user sent to dashboard.</li>
+        </ul>
+
+        <h3 style="font-size: 15px; margin: 18px 0 4px 42px;">Accessibility tests</h3>
+        <ul>
+          <li>I run <b>axe-core</b> on every page in the browser tests.</li>
+          <li>It checks color contrast, missing labels, broken landmarks.</li>
+          <li>Result: <b>zero violations</b> on all five pages.</li>
+        </ul>
+
+        <h3 style="font-size: 15px; margin: 18px 0 4px 42px;">The "restart" test (the one I'm proud of)</h3>
+        <ul>
+          <li>Register a user.</li>
+          <li>Close the app.</li>
+          <li>Start the app again on the <b>same database file</b>.</li>
+          <li>Try to log in with the same email and password — it works.</li>
+          <li>This proves the <b>data really survives a server restart</b>.</li>
+        </ul>
+
+        <h3 style="font-size: 15px; margin: 18px 0 4px 42px;">Why these tests, not more</h3>
+        <ul>
+          <li>I test the <b>risky paths</b> — auth, data, redirects.</li>
+          <li>I do not chase 100% line coverage. That is wasted time on simple code.</li>
+          <li>If a bug would <b>cost the user trust</b>, I write a test for it.</li>
+        </ul>
+
+        <div class="say">
+          On the backend I have unit tests and end-to-end tests. On the frontend I have component tests and Playwright browser tests, plus an accessibility check on every page. My favourite test is the <em>restart test</em>: it signs up a user, closes the app, opens it again on the same database, and logs back in. It proves the storage really works.
+        </div>
+      </section>
+
+      <!-- 6 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">6</span>Hard parts I solved</h2>
+        <p class="sub">Pick one or two of these if they ask "what was the hardest part?"</p>
+        <ul>
+          <li><b>Production was calling localhost.</b> The browser kept asking for <code>localhost:3001</code> on the live site. I fixed the build setup so the live site uses the right URL.</li>
+          <li><b>Every deploy was wiping all signups.</b> The server stored users in memory, so a restart erased them. I switched to SQLite — a small file that lives on the server and is not touched by deploys.</li>
+          <li><b>Four tests broke after I moved a feature.</b> Old tests still pointed at the old page. Instead of patching them, I split them into two clean test files — one for each page.</li>
+        </ul>
+        <div class="say">
+          The hardest part was that every deploy was wiping the signups. I had used a memory store. I moved to SQLite — a small file database — and added a test that proves the data survives a restart. <em>That problem could not happen again</em>.
+        </div>
+      </section>
+
+      <!-- 7 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">7</span>What I would do next</h2>
+        <p class="sub">Shows you know what's missing without sounding negative.</p>
+        <ul>
+          <li>Set up <b>GitHub Actions</b> to run all tests on every push.</li>
+          <li>Add a <b>coverage report</b> so I can see exactly what is and isn't tested.</li>
+          <li>Add <b>rate limiting</b> on login — so no one can guess passwords too fast.</li>
+          <li>Write more tests for the <b>Dashboard</b> page (it uses mock data right now).</li>
+          <li>Move from <b>SQLite to Postgres</b> if the user count grows.</li>
+        </ul>
+        <div class="say">
+          The next steps are clear: a CI pipeline so tests run on every push, a coverage report, and rate limiting on login. If the project grew, I would move from SQLite to Postgres. <em>I know where the gaps are</em>.
+        </div>
+      </section>
+
+      <!-- 8 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">8</span>Quick answers to likely questions</h2>
+        <p class="sub">Glance here if a question catches you off guard.</p>
+        <div class="qa">
+          <div class="card">
+            <p class="q">"Why JWT in one sentence?"</p>
+            <p class="a">A JWT is a small signed token that proves who you are, so the server does not have to remember every login.</p>
+          </div>
+          <div class="card">
+            <p class="q">"Why SQLite, not Postgres?"</p>
+            <p class="a">The task said keep it simple. SQLite is one file on the server. No setup, no extra service, and it survives restarts. I would switch to Postgres for real scale.</p>
+          </div>
+          <div class="card">
+            <p class="q">"Why no Passport for auth?"</p>
+            <p class="a">Passport adds five packages for the same outcome. I wrote one small guard that checks the token. Less code, same security.</p>
+          </div>
+          <div class="card">
+            <p class="q">"How do you stop someone guessing emails?"</p>
+            <p class="a">Wrong password and unknown email both return the same error. So an attacker can't tell which emails are real.</p>
+          </div>
+          <div class="card">
+            <p class="q">"What did you mock in tests, and why?"</p>
+            <p class="a">In end-to-end tests I mock nothing — I want it real. In unit tests I use an in-memory database so they run fast. The risky paths are always tested against real code.</p>
+          </div>
+          <div class="card">
+            <p class="q">"How would you scale this?"</p>
+            <p class="a">Move the database to Postgres on a separate server. Run more app servers behind a load balancer. Add a cache for read-heavy pages.</p>
+          </div>
+          <div class="card">
+            <p class="q">"How is the password stored?"</p>
+            <p class="a">Hashed with bcrypt. Never plain text. The hash never leaves the user service — even the export feature strips it out.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9 ─────────────────────────────────────────────────────────────── -->
+      <section>
+        <h2><span class="num">9</span>Live links</h2>
+        <p class="sub">Open these if they ask to see something.</p>
+        <div class="links">
+          <a href="https://bff.i-ash.com" target="_blank" rel="noopener">Live site</a>
+          <a href="https://bff.i-ash.com/docs.html" target="_blank" rel="noopener">Tech docs</a>
+          <a href="https://www.figma.com/design/LPbDwllvoYO7ab3OVc8AfV/beff-task" target="_blank" rel="noopener">Figma</a>
+          <a href="https://github.com/Eiad/beff" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </section>
+
+      <p class="footnote">
+        Take a breath before you answer. It is okay to say <em>"good question — let me think for a second."</em>
+      </p>
+
+    </div>
+  </body>
+</html>
